@@ -1,0 +1,164 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+jobs:
+  create-release:
+    name: Create GitHub Release
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Get version
+        id: version
+        shell: pwsh
+        run: |
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            $version = "${{ github.event.inputs.version }}"
+          } else {
+            $version = "${{ github.ref_name }}"
+          }
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+          echo "Release version: $version"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Build Windows installer
+        run: npm run electron:build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Prepare release files
+        shell: pwsh
+        run: |
+          # Create release directory
+          New-Item -ItemType Directory -Force -Path release-files
+
+          # Copy installer
+          $exeFile = Get-ChildItem -Path release -Filter *.exe | Select-Object -First 1
+          if ($exeFile) {
+            Copy-Item $exeFile.FullName -Destination release-files/
+            echo "✅ Copied installer: $($exeFile.Name)"
+          }
+
+          # Create portable ZIP
+          if (Test-Path "release/win-unpacked") {
+            Compress-Archive -Path "release/win-unpacked/*" -DestinationPath "release-files/HGM-POS-Portable-${{ steps.version.outputs.VERSION }}.zip"
+            echo "✅ Created portable ZIP"
+          }
+
+      - name: Generate release notes
+        shell: pwsh
+        run: |
+          $notes = @"
+          ## HGM POS System ${{ steps.version.outputs.VERSION }}
+
+          ### 🎉 What's Included
+
+          - **Full Windows Installer** - One-click installation with shortcuts
+          - **Portable Version** - Extract and run without installation
+
+          ### 📦 Installation
+
+          #### Option 1: Full Installer (Recommended)
+          1. Download \`HGM-POS-Setup-${{ steps.version.outputs.VERSION }}.exe\`
+          2. Run the installer and follow the wizard
+          3. Launch from Desktop shortcut or Start Menu
+
+          #### Option 2: Portable
+          1. Download \`HGM-POS-Portable-${{ steps.version.outputs.VERSION }}.zip\`
+          2. Extract to any folder
+          3. Run \`HGM POS System.exe\`
+
+          ### 🔐 Default Credentials
+          - **Username:** admin
+          - **Password:** admin123
+
+          ### ✨ Features
+
+          - ✅ Complete POS system for Bar, Restaurant, and Lodge
+          - ✅ Offline-first operation
+          - ✅ Touch-optimized interface
+          - ✅ Receipt printing support
+          - ✅ Cash drawer integration
+          - ✅ Payment processing (Cash, Card, Mobile Money)
+          - ✅ Comprehensive reports and analytics
+          - ✅ Multi-user support with role-based access
+
+          ### 📝 System Requirements
+
+          - **OS:** Windows 10/11 (64-bit)
+          - **RAM:** 4GB minimum, 8GB recommended
+          - **Disk Space:** 500MB
+          - **Display:** 1024x768 minimum resolution
+          - **Network:** Required for payment processing only
+
+          ### 🐛 Known Issues
+
+          - None reported in this release
+
+          ### 📞 Support
+
+          For issues or questions, please open an issue on GitHub.
+
+          ---
+
+          **Built on:** $(Get-Date -Format "yyyy-MM-dd HH:mm:ss UTC")
+          **Commit:** ${{ github.sha }}
+          "@
+
+          $notes | Out-File -FilePath release-notes.md -Encoding UTF8
+          echo "✅ Generated release notes"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          name: HGM POS System ${{ steps.version.outputs.VERSION }}
+          body_path: release-notes.md
+          draft: false
+          prerelease: false
+          files: |
+            release-files/*.exe
+            release-files/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release summary
+        shell: pwsh
+        run: |
+          echo "## 🎊 Release ${{ steps.version.outputs.VERSION }} Created!" >> $env:GITHUB_STEP_SUMMARY
+          echo "" >> $env:GITHUB_STEP_SUMMARY
+          echo "### 📦 Assets" >> $env:GITHUB_STEP_SUMMARY
+          echo "" >> $env:GITHUB_STEP_SUMMARY
+          Get-ChildItem release-files | ForEach-Object {
+            $size = [math]::Round($_.Length / 1MB, 2)
+            echo "- $($_.Name) - $size MB" >> $env:GITHUB_STEP_SUMMARY
+          }
+          echo "" >> $env:GITHUB_STEP_SUMMARY
+          echo "### 🔗 Links" >> $env:GITHUB_STEP_SUMMARY
+          echo "" >> $env:GITHUB_STEP_SUMMARY
+          echo "- [View Release](https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.VERSION }})" >> $env:GITHUB_STEP_SUMMARY
+          echo "- [Download Latest](https://github.com/${{ github.repository }}/releases/latest)" >> $env:GITHUB_STEP_SUMMARY

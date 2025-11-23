@@ -1,0 +1,121 @@
+{
+  "name": "hgm-pos",
+  "version": "1.0.0",
+  "main": "dist/electron/main.js",
+  "scripts": {
+    "dev:backend": "nodemon --watch src/backend --ext ts,json --exec \"node --import tsx src/backend/server.ts\"",
+    "dev:frontend": "vite",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build:backend": "tsc -p tsconfig.backend.json",
+    "build:frontend": "vite build",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "build": "npm run build:backend && npm run build:frontend && npm run build:electron",
+    "create-icon": "node scripts/create-icon.js",
+    "electron:dev": "concurrently \"npm run dev:backend\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:start": "electron .",
+    "electron:build": "npm run build && electron-builder",
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "HGM Properties POS System",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
+    "escpos": "^3.0.0-alpha.6",
+    "escpos-usb": "^3.0.0-alpha.4",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "sqlite3": "^5.1.7",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@types/uuid": "^10.0.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "concurrently": "^9.2.1",
+    "electron": "^38.4.0",
+    "electron-builder": "^26.0.12",
+    "esbuild": "^0.27.0",
+    "nodemon": "^3.1.10",
+    "sharp": "^0.34.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12",
+    "wait-on": "^9.0.1"
+  },
+  "build": {
+    "appId": "com.hgm.pos",
+    "productName": "HGM POS System",
+    "directories": {
+      "output": "release",
+      "buildResources": "public"
+    },
+    "files": [
+      "dist/electron/**/*",
+      "dist/frontend/**/*",
+      "dist/backend/**/*",
+      "public/**/*",
+      "package.json",
+      ".env",
+      "node_modules/**/*"
+    ],
+    "asarUnpack": [
+      "dist/backend/**/*",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "public",
+        "to": "public",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "dist/backend",
+        "to": "dist/backend",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "dist/frontend",
+        "to": "dist/frontend",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "public/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "HGM POS"
+    }
+  }
+}
