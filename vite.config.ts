@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [react()],
   root: './',
   publicDir: 'public',
+  base: './', // Use relative paths for assets (required for Electron file:// protocol)
   build: {
     outDir: 'dist/frontend',
     emptyOutDir: true
