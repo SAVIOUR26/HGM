@@ -140,19 +140,6 @@ function Login({ onLogin }: LoginProps) {
             )}
           </button>
         </form>
-
-        <div style={{ 
-          marginTop: '24px', 
-          padding: '16px',
-          background: '#f9fafb',
-          borderRadius: '8px',
-          fontSize: '12px',
-          color: '#6b7280'
-        }}>
-          <p style={{ marginBottom: '4px' }}><strong>Default Login:</strong></p>
-          <p>Username: <code style={{ background: '#fff', padding: '2px 6px', borderRadius: '4px' }}>admin</code></p>
-          <p>Password: <code style={{ background: '#fff', padding: '2px 6px', borderRadius: '4px' }}>admin123</code></p>
-        </div>
       </div>
     </div>
   );
