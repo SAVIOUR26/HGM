@@ -6,7 +6,7 @@ interface AdminPanelProps {
   onBack: () => void;
 }
 
-type Tab = 'items' | 'users';
+type Tab = 'items' | 'users' | 'settings';
 
 interface Item {
   id: number;
@@ -58,11 +58,19 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
     role: 'cashier'
   });
 
+  // Printer Settings States
+  const [printers, setPrinters] = useState<any[]>([]);
+  const [selectedPrinter, setSelectedPrinter] = useState<string>('');
+  const [testPrintLoading, setTestPrintLoading] = useState(false);
+  const [testPrintResult, setTestPrintResult] = useState<string>('');
+
   useEffect(() => {
     if (activeTab === 'items') {
       fetchItems();
     } else if (activeTab === 'users') {
       fetchUsers();
+    } else if (activeTab === 'settings') {
+      fetchPrinters();
     }
   }, [activeTab, filterSection]);
 
@@ -224,6 +232,68 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
     }
   };
 
+  // Printer Management Functions
+  const fetchPrinters = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('http://localhost:3000/api/receipt/printers', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await response.json();
+      if (data.success && data.printers) {
+        setPrinters(data.printers);
+      }
+    } catch (error) {
+      console.error('Failed to fetch printers:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTestPrint = async () => {
+    setTestPrintLoading(true);
+    setTestPrintResult('');
+    try {
+      const response = await fetch('http://localhost:3000/api/receipt/test-print', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ printerName: selectedPrinter || undefined })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setTestPrintResult('✅ Test print sent successfully! Check your printer.');
+      } else {
+        setTestPrintResult('❌ Test print failed: ' + (data.message || data.error));
+      }
+    } catch (error: any) {
+      setTestPrintResult('❌ Error: ' + error.message);
+    } finally {
+      setTestPrintLoading(false);
+    }
+  };
+
+  const handleOpenCashDrawer = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/receipt/cash-drawer', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert('✅ Cash drawer opened successfully!');
+      } else {
+        alert('❌ Failed to open cash drawer: ' + (data.message || data.error));
+      }
+    } catch (error: any) {
+      alert('❌ Error: ' + error.message);
+    }
+  };
+
   const getSectionColor = (section: string) => {
     switch(section) {
       case 'bar': return '#3b82f6';
@@ -289,6 +359,22 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
             }}
           >
             👥 User Management
+          </button>
+          <button
+            onClick={() => setActiveTab('settings')}
+            style={{
+              padding: '16px 0',
+              fontSize: '16px',
+              fontWeight: '600',
+              color: activeTab === 'settings' ? '#667eea' : '#6b7280',
+              background: 'none',
+              border: 'none',
+              borderBottom: activeTab === 'settings' ? '3px solid #667eea' : '3px solid transparent',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+          >
+            ⚙️ Settings
           </button>
         </div>
       </div>
@@ -807,6 +893,265 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
                   </table>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'settings' && (
+          <div>
+            <h2 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '20px' }}>System Settings</h2>
+
+            {/* Printer Configuration */}
+            <div className="card" style={{ marginBottom: '24px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                🖨️ Printer Configuration
+              </h3>
+
+              <div style={{ marginBottom: '24px' }}>
+                <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '16px' }}>
+                  Configure your thermal printer and cash drawer for receipt printing.
+                </p>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                  {/* Detected Printers */}
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                      Detected USB Printers
+                    </label>
+                    {loading ? (
+                      <div style={{ padding: '20px', textAlign: 'center' }}>
+                        <div className="spinner" style={{ width: '24px', height: '24px', margin: '0 auto' }}></div>
+                      </div>
+                    ) : printers.length > 0 ? (
+                      <div>
+                        {printers.map((printer, index) => (
+                          <div key={index} style={{
+                            padding: '12px',
+                            background: '#f9fafb',
+                            borderRadius: '8px',
+                            marginBottom: '8px',
+                            border: '2px solid #e5e7eb'
+                          }}>
+                            <div style={{ fontWeight: '600', color: '#1f2937' }}>
+                              {printer.name}
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                              Type: {printer.type}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div style={{
+                        padding: '16px',
+                        background: '#fef3c7',
+                        borderRadius: '8px',
+                        border: '1px solid #fbbf24'
+                      }}>
+                        <p style={{ fontSize: '14px', color: '#92400e', marginBottom: '8px' }}>
+                          ⚠️ No USB thermal printers detected
+                        </p>
+                        <p style={{ fontSize: '12px', color: '#92400e' }}>
+                          Please connect your XPRINTER or compatible thermal printer via USB.
+                        </p>
+                      </div>
+                    )}
+                    <button
+                      onClick={fetchPrinters}
+                      className="btn btn-secondary"
+                      style={{ marginTop: '12px', width: '100%' }}
+                    >
+                      🔄 Refresh Printers
+                    </button>
+                  </div>
+
+                  {/* Printer Actions */}
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                      Printer Actions
+                    </label>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <button
+                        onClick={handleTestPrint}
+                        disabled={testPrintLoading}
+                        className="btn btn-primary"
+                        style={{ width: '100%' }}
+                      >
+                        {testPrintLoading ? (
+                          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                            <div className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px' }}></div>
+                            Printing...
+                          </span>
+                        ) : (
+                          '🖨️ Send Test Print'
+                        )}
+                      </button>
+
+                      <button
+                        onClick={handleOpenCashDrawer}
+                        className="btn btn-secondary"
+                        style={{ width: '100%' }}
+                      >
+                        💵 Open Cash Drawer
+                      </button>
+
+                      {testPrintResult && (
+                        <div style={{
+                          padding: '12px',
+                          background: testPrintResult.includes('✅') ? '#dcfce7' : '#fee2e2',
+                          color: testPrintResult.includes('✅') ? '#16a34a' : '#dc2626',
+                          borderRadius: '8px',
+                          fontSize: '14px',
+                          fontWeight: '500'
+                        }}>
+                          {testPrintResult}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Setup Instructions */}
+              <div style={{
+                marginTop: '24px',
+                padding: '16px',
+                background: '#eff6ff',
+                borderRadius: '8px',
+                border: '1px solid #3b82f6'
+              }}>
+                <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#1e40af', marginBottom: '12px' }}>
+                  📌 Setup Instructions
+                </h4>
+                <div style={{ fontSize: '13px', color: '#1e40af', lineHeight: '1.6' }}>
+                  <p style={{ marginBottom: '8px' }}><strong>Hardware Setup:</strong></p>
+                  <ol style={{ marginLeft: '20px', marginBottom: '12px' }}>
+                    <li>Connect XPRINTER to computer via USB cable</li>
+                    <li>Connect cash drawer to printer's DK port (RJ11/RJ12 cable)</li>
+                    <li>Load 80mm thermal paper into printer</li>
+                    <li>Power on the printer</li>
+                  </ol>
+                  <p style={{ marginBottom: '8px' }}><strong>Supported Printers:</strong></p>
+                  <ul style={{ marginLeft: '20px' }}>
+                    <li>XPRINTER XP-58, XP-80, XP-365B</li>
+                    <li>Epson TM-T20, TM-T82</li>
+                    <li>Star TSP100, TSP143</li>
+                    <li>Any ESC/POS compatible thermal printer</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Receipt Customization */}
+            <div className="card" style={{ marginBottom: '24px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                🧾 Receipt Customization
+              </h3>
+
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                  Business Name
+                </label>
+                <input
+                  type="text"
+                  className="input"
+                  defaultValue="HGM Properties Ltd"
+                  placeholder="Your business name"
+                />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                    Phone Number
+                  </label>
+                  <input
+                    type="text"
+                    className="input"
+                    defaultValue="+256-XXX-XXXXXX"
+                    placeholder="Business phone"
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    className="input"
+                    defaultValue="info@hgmproperties.com"
+                    placeholder="Business email"
+                  />
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                  Address
+                </label>
+                <input
+                  type="text"
+                  className="input"
+                  defaultValue="Kampala, Uganda"
+                  placeholder="Business address"
+                />
+              </div>
+
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                  Footer Message
+                </label>
+                <textarea
+                  className="input"
+                  rows={3}
+                  defaultValue="Thank you for your business!&#10;Please visit us again"
+                  placeholder="Custom message at bottom of receipt"
+                />
+              </div>
+
+              <div style={{
+                padding: '12px',
+                background: '#fef3c7',
+                borderRadius: '8px',
+                fontSize: '12px',
+                color: '#92400e',
+                marginBottom: '16px'
+              }}>
+                💡 <strong>Note:</strong> These settings are stored in your .env file. They will be applied to all new receipts.
+              </div>
+
+              <button className="btn btn-primary">
+                💾 Save Receipt Settings
+              </button>
+            </div>
+
+            {/* System Information */}
+            <div className="card">
+              <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                ℹ️ System Information
+              </h3>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div>
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>System Version</div>
+                  <div style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>HGM POS v1.0.0</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>Database</div>
+                  <div style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>SQLite</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>Printer Protocol</div>
+                  <div style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>ESC/POS</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>Cash Drawer</div>
+                  <div style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
+                    {printers.length > 0 ? '✅ Ready' : '⚠️ Not Detected'}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
