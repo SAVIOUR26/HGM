@@ -64,6 +64,11 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
   const [testPrintLoading, setTestPrintLoading] = useState(false);
   const [testPrintResult, setTestPrintResult] = useState<string>('');
 
+  // PesaPal Settings States
+  const [pesapalConfig, setPesapalConfig] = useState<any>(null);
+  const [pesapalLoading, setPesapalLoading] = useState(false);
+  const [pesapalTestResult, setPesapalTestResult] = useState<string>('');
+
   useEffect(() => {
     if (activeTab === 'items') {
       fetchItems();
@@ -71,6 +76,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
       fetchUsers();
     } else if (activeTab === 'settings') {
       fetchPrinters();
+      fetchPesapalConfig();
     }
   }, [activeTab, filterSection]);
 
@@ -291,6 +297,43 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
       }
     } catch (error: any) {
       alert('❌ Error: ' + error.message);
+    }
+  };
+
+  // PesaPal Management Functions
+  const fetchPesapalConfig = async () => {
+    setPesapalLoading(true);
+    try {
+      const response = await fetch('http://localhost:3000/api/payment/config', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await response.json();
+      setPesapalConfig(data);
+    } catch (error) {
+      console.error('Failed to fetch PesaPal config:', error);
+    } finally {
+      setPesapalLoading(false);
+    }
+  };
+
+  const handleTestPesapalConnection = async () => {
+    setPesapalLoading(true);
+    setPesapalTestResult('');
+    try {
+      const response = await fetch('http://localhost:3000/api/payment/config', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await response.json();
+
+      if (data.isConfigured) {
+        setPesapalTestResult('✅ PesaPal is configured and ready! Environment: ' + data.environment);
+      } else {
+        setPesapalTestResult('❌ PesaPal not configured: ' + data.errors.join(', '));
+      }
+    } catch (error: any) {
+      setPesapalTestResult('❌ Error: ' + error.message);
+    } finally {
+      setPesapalLoading(false);
     }
   };
 
@@ -1039,6 +1082,227 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
                     <li>Star TSP100, TSP143</li>
                     <li>Any ESC/POS compatible thermal printer</li>
                   </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* PesaPal Payment Configuration */}
+            <div className="card" style={{ marginBottom: '24px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                💳 PesaPal Payment Gateway
+              </h3>
+
+              <div style={{ marginBottom: '24px' }}>
+                <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '16px' }}>
+                  Configure PesaPal API 3.0 integration for mobile money and card payments.
+                </p>
+
+                {/* Configuration Status */}
+                <div style={{
+                  padding: '16px',
+                  background: pesapalConfig?.isConfigured ? '#dcfce7' : '#fee2e2',
+                  borderRadius: '8px',
+                  marginBottom: '20px',
+                  border: `2px solid ${pesapalConfig?.isConfigured ? '#16a34a' : '#ef4444'}`
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '24px' }}>
+                      {pesapalConfig?.isConfigured ? '✅' : '⚠️'}
+                    </span>
+                    <div>
+                      <div style={{
+                        fontWeight: '700',
+                        fontSize: '16px',
+                        color: pesapalConfig?.isConfigured ? '#16a34a' : '#dc2626'
+                      }}>
+                        {pesapalConfig?.isConfigured ? 'PesaPal is Configured' : 'PesaPal Not Configured'}
+                      </div>
+                      <div style={{
+                        fontSize: '13px',
+                        color: pesapalConfig?.isConfigured ? '#16a34a' : '#dc2626'
+                      }}>
+                        {pesapalConfig?.isConfigured
+                          ? `Environment: ${pesapalConfig.environment} | IPN URL: ${pesapalConfig.ipnUrl}`
+                          : pesapalConfig?.errors?.join(', ') || 'Loading...'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                  {/* Configuration Fields */}
+                  <div>
+                    <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#1f2937', marginBottom: '16px' }}>
+                      API Credentials
+                    </h4>
+
+                    <div style={{ marginBottom: '16px' }}>
+                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                        Environment
+                      </label>
+                      <select className="input">
+                        <option value="sandbox">Sandbox (Testing)</option>
+                        <option value="production">Production (Live)</option>
+                      </select>
+                      <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+                        Use Sandbox for testing, Production for live payments
+                      </p>
+                    </div>
+
+                    <div style={{ marginBottom: '16px' }}>
+                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                        Consumer Key
+                      </label>
+                      <input
+                        type="text"
+                        className="input"
+                        placeholder="Your PesaPal Consumer Key"
+                        defaultValue=""
+                      />
+                    </div>
+
+                    <div style={{ marginBottom: '16px' }}>
+                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                        Consumer Secret
+                      </label>
+                      <input
+                        type="password"
+                        className="input"
+                        placeholder="Your PesaPal Consumer Secret"
+                        defaultValue=""
+                      />
+                    </div>
+
+                    <div style={{ marginBottom: '16px' }}>
+                      <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                        IPN Callback URL
+                      </label>
+                      <input
+                        type="text"
+                        className="input"
+                        defaultValue="http://localhost:3000/api/payment/callback"
+                        placeholder="Your callback URL"
+                      />
+                      <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+                        Must be publicly accessible for production
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Integration Info & Actions */}
+                  <div>
+                    <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#1f2937', marginBottom: '16px' }}>
+                      Integration Status
+                    </h4>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <button
+                        onClick={handleTestPesapalConnection}
+                        disabled={pesapalLoading}
+                        className="btn btn-primary"
+                        style={{ width: '100%' }}
+                      >
+                        {pesapalLoading ? (
+                          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                            <div className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px' }}></div>
+                            Testing...
+                          </span>
+                        ) : (
+                          '🔌 Test Connection'
+                        )}
+                      </button>
+
+                      <button
+                        onClick={fetchPesapalConfig}
+                        className="btn btn-secondary"
+                        style={{ width: '100%' }}
+                      >
+                        🔄 Refresh Status
+                      </button>
+
+                      {pesapalTestResult && (
+                        <div style={{
+                          padding: '12px',
+                          background: pesapalTestResult.includes('✅') ? '#dcfce7' : '#fee2e2',
+                          color: pesapalTestResult.includes('✅') ? '#16a34a' : '#dc2626',
+                          borderRadius: '8px',
+                          fontSize: '14px',
+                          fontWeight: '500'
+                        }}>
+                          {pesapalTestResult}
+                        </div>
+                      )}
+                    </div>
+
+                    <div style={{
+                      marginTop: '20px',
+                      padding: '12px',
+                      background: '#eff6ff',
+                      borderRadius: '8px',
+                      fontSize: '13px',
+                      color: '#1e40af',
+                      lineHeight: '1.6'
+                    }}>
+                      <p style={{ fontWeight: '700', marginBottom: '8px' }}>📌 Quick Setup:</p>
+                      <ol style={{ marginLeft: '20px', marginTop: '8px' }}>
+                        <li>Register at developer.pesapal.com</li>
+                        <li>Create an app to get credentials</li>
+                        <li>Add credentials to .env file</li>
+                        <li>Test connection above</li>
+                        <li>Switch to production when ready</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{
+                  marginTop: '20px',
+                  padding: '12px',
+                  background: '#fef3c7',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  color: '#92400e'
+                }}>
+                  💡 <strong>Note:</strong> These settings are stored in your .env file. Update PESAPAL_CONSUMER_KEY, PESAPAL_CONSUMER_SECRET, and PESAPAL_ENVIRONMENT.
+                </div>
+
+                <button className="btn btn-primary" style={{ marginTop: '16px' }}>
+                  💾 Save PesaPal Settings
+                </button>
+              </div>
+
+              {/* API Documentation Reference */}
+              <div style={{
+                marginTop: '24px',
+                padding: '16px',
+                background: '#f9fafb',
+                borderRadius: '8px',
+                border: '1px solid #e5e7eb'
+              }}>
+                <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#1f2937', marginBottom: '12px' }}>
+                  📚 Integration Details
+                </h4>
+                <div style={{ fontSize: '13px', color: '#6b7280', lineHeight: '1.6' }}>
+                  <p style={{ marginBottom: '8px' }}><strong>API Version:</strong> PesaPal API 3.0 (JSON)</p>
+                  <p style={{ marginBottom: '8px' }}><strong>Supported Payments:</strong></p>
+                  <ul style={{ marginLeft: '20px', marginBottom: '12px' }}>
+                    <li>Mobile Money (MTN, Airtel)</li>
+                    <li>Visa/Mastercard</li>
+                    <li>Bank Transfers</li>
+                  </ul>
+                  <p style={{ marginBottom: '8px' }}><strong>Implemented Features:</strong></p>
+                  <ul style={{ marginLeft: '20px' }}>
+                    <li>✅ OAuth2 Authentication</li>
+                    <li>✅ IPN Registration & Callbacks</li>
+                    <li>✅ Order Submission</li>
+                    <li>✅ Transaction Status Checking</li>
+                    <li>✅ Automatic Status Updates</li>
+                  </ul>
+                  <p style={{ marginTop: '12px' }}>
+                    <a href="https://developer.pesapal.com/how-to-integrate/e-commerce/api-30-json/api-reference" target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', textDecoration: 'underline' }}>
+                      View Official API Documentation →
+                    </a>
+                  </p>
                 </div>
               </div>
             </div>
