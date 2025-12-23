@@ -69,6 +69,17 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
   const [pesapalLoading, setPesapalLoading] = useState(false);
   const [pesapalTestResult, setPesapalTestResult] = useState<string>('');
 
+  // Business Settings States
+  const [businessSettings, setBusinessSettings] = useState({
+    business_name: 'HGM Properties Ltd',
+    phone: '+256-XXX-XXXXXX',
+    email: 'info@hgmproperties.com',
+    address: 'Kampala, Uganda',
+    footer_message: 'Thank you for your business!\nPlease visit us again'
+  });
+  const [businessLoading, setBusinessLoading] = useState(false);
+  const [businessSaveResult, setBusinessSaveResult] = useState<string>('');
+
   useEffect(() => {
     if (activeTab === 'items') {
       fetchItems();
@@ -77,6 +88,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
     } else if (activeTab === 'settings') {
       fetchPrinters();
       fetchPesapalConfig();
+      fetchBusinessSettings();
     }
   }, [activeTab, filterSection]);
 
@@ -334,6 +346,54 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
       setPesapalTestResult('❌ Error: ' + error.message);
     } finally {
       setPesapalLoading(false);
+    }
+  };
+
+  // Business Settings Management Functions
+  const fetchBusinessSettings = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/settings/business', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await response.json();
+      if (data) {
+        setBusinessSettings({
+          business_name: data.business_name || 'HGM Properties Ltd',
+          phone: data.phone || '+256-XXX-XXXXXX',
+          email: data.email || 'info@hgmproperties.com',
+          address: data.address || 'Kampala, Uganda',
+          footer_message: data.footer_message || 'Thank you for your business!\nPlease visit us again'
+        });
+      }
+    } catch (error) {
+      console.error('Failed to fetch business settings:', error);
+    }
+  };
+
+  const handleSaveBusinessSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBusinessLoading(true);
+    setBusinessSaveResult('');
+    try {
+      const response = await fetch('http://localhost:3000/api/settings/business', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(businessSettings)
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setBusinessSaveResult('✅ Business settings saved successfully! These will appear on all new receipts.');
+      } else {
+        setBusinessSaveResult('❌ Failed to save settings: ' + (data.error || 'Unknown error'));
+      }
+    } catch (error: any) {
+      setBusinessSaveResult('❌ Error: ' + error.message);
+    } finally {
+      setBusinessLoading(false);
     }
   };
 
@@ -1313,81 +1373,117 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
                 🧾 Receipt Customization
               </h3>
 
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
-                  Business Name
-                </label>
-                <input
-                  type="text"
-                  className="input"
-                  defaultValue="HGM Properties Ltd"
-                  placeholder="Your business name"
-                />
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-                <div>
+              <form onSubmit={handleSaveBusinessSettings}>
+                <div style={{ marginBottom: '16px' }}>
                   <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
-                    Phone Number
+                    Business Name
                   </label>
                   <input
                     type="text"
                     className="input"
-                    defaultValue="+256-XXX-XXXXXX"
-                    placeholder="Business phone"
+                    value={businessSettings.business_name}
+                    onChange={(e) => setBusinessSettings({...businessSettings, business_name: e.target.value})}
+                    placeholder="Your business name"
+                    required
                   />
                 </div>
-                <div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                      Phone Number
+                    </label>
+                    <input
+                      type="text"
+                      className="input"
+                      value={businessSettings.phone}
+                      onChange={(e) => setBusinessSettings({...businessSettings, phone: e.target.value})}
+                      placeholder="Business phone"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      className="input"
+                      value={businessSettings.email}
+                      onChange={(e) => setBusinessSettings({...businessSettings, email: e.target.value})}
+                      placeholder="Business email"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: '16px' }}>
                   <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
-                    Email Address
+                    Address
                   </label>
                   <input
-                    type="email"
+                    type="text"
                     className="input"
-                    defaultValue="info@hgmproperties.com"
-                    placeholder="Business email"
+                    value={businessSettings.address}
+                    onChange={(e) => setBusinessSettings({...businessSettings, address: e.target.value})}
+                    placeholder="Business address"
+                    required
                   />
                 </div>
-              </div>
 
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
-                  Address
-                </label>
-                <input
-                  type="text"
-                  className="input"
-                  defaultValue="Kampala, Uganda"
-                  placeholder="Business address"
-                />
-              </div>
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                    Footer Message
+                  </label>
+                  <textarea
+                    className="input"
+                    rows={3}
+                    value={businessSettings.footer_message}
+                    onChange={(e) => setBusinessSettings({...businessSettings, footer_message: e.target.value})}
+                    placeholder="Custom message at bottom of receipt"
+                  />
+                </div>
 
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
-                  Footer Message
-                </label>
-                <textarea
-                  className="input"
-                  rows={3}
-                  defaultValue="Thank you for your business!&#10;Please visit us again"
-                  placeholder="Custom message at bottom of receipt"
-                />
-              </div>
+                <div style={{
+                  padding: '12px',
+                  background: '#eff6ff',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  color: '#1e40af',
+                  marginBottom: '16px'
+                }}>
+                  💡 <strong>Info:</strong> These settings are stored in the database and will appear on all printed receipts.
+                </div>
 
-              <div style={{
-                padding: '12px',
-                background: '#fef3c7',
-                borderRadius: '8px',
-                fontSize: '12px',
-                color: '#92400e',
-                marginBottom: '16px'
-              }}>
-                💡 <strong>Note:</strong> These settings are stored in your .env file. They will be applied to all new receipts.
-              </div>
+                {businessSaveResult && (
+                  <div style={{
+                    padding: '12px',
+                    background: businessSaveResult.includes('✅') ? '#dcfce7' : '#fee2e2',
+                    color: businessSaveResult.includes('✅') ? '#16a34a' : '#dc2626',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    marginBottom: '16px'
+                  }}>
+                    {businessSaveResult}
+                  </div>
+                )}
 
-              <button className="btn btn-primary">
-                💾 Save Receipt Settings
-              </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={businessLoading}
+                >
+                  {businessLoading ? (
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                      <div className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px' }}></div>
+                      Saving...
+                    </span>
+                  ) : (
+                    '💾 Save Receipt Settings'
+                  )}
+                </button>
+              </form>
             </div>
 
             {/* System Information */}
