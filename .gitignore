@@ -3,6 +3,8 @@ node_modules/
 
 # Build output
 dist/
+!dist/web/
+!dist/web/**
 release/
 
 # Database
