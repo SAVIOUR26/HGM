@@ -5,16 +5,17 @@ export default defineConfig({
   plugins: [react()],
   root: './',
   publicDir: 'public',
-  base: './', // Use relative paths for assets (required for Electron file:// protocol)
+  base: '/', // Root path for web deployment
   build: {
-    outDir: 'dist/frontend',
-    emptyOutDir: true
+    outDir: 'dist/web',
+    emptyOutDir: true,
+    manifest: true
   },
   server: {
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost/api',
         changeOrigin: true
       }
     }

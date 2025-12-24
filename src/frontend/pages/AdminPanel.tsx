@@ -96,8 +96,8 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
     setLoading(true);
     try {
       const url = filterSection === 'all'
-        ? 'http://localhost:3000/api/items'
-        : `http://localhost:3000/api/items?section=${filterSection}`;
+        ? '/api/items'
+        : `/api/items?section=${filterSection}`;
 
       const response = await fetch(url, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -115,7 +115,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/api/users', {
+      const response = await fetch('/api/users', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -132,7 +132,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
   const handleAddItem = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/api/items', {
+      const response = await fetch('/api/items', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -157,7 +157,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
 
   const handleUpdateItem = async (itemId: number, updates: Partial<Item>) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/items/${itemId}`, {
+      const response = await fetch(`/api/items/${itemId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -184,7 +184,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/api/items/${itemId}`, {
+      const response = await fetch(`/api/items/${itemId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -204,7 +204,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/api/users', {
+      const response = await fetch('/api/users', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -233,7 +233,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+      const response = await fetch(`/api/users/${userId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -254,7 +254,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
   const fetchPrinters = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/api/receipt/printers', {
+      const response = await fetch('/api/receipt/printers', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -272,7 +272,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
     setTestPrintLoading(true);
     setTestPrintResult('');
     try {
-      const response = await fetch('http://localhost:3000/api/receipt/test-print', {
+      const response = await fetch('/api/receipt/test-print', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -296,7 +296,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
 
   const handleOpenCashDrawer = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/receipt/cash-drawer', {
+      const response = await fetch('/api/receipt/cash-drawer', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -316,7 +316,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
   const fetchPesapalConfig = async () => {
     setPesapalLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/api/payment/config', {
+      const response = await fetch('/api/payment/config', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -332,7 +332,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
     setPesapalLoading(true);
     setPesapalTestResult('');
     try {
-      const response = await fetch('http://localhost:3000/api/payment/config', {
+      const response = await fetch('/api/payment/config', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -352,7 +352,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
   // Business Settings Management Functions
   const fetchBusinessSettings = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/settings/business', {
+      const response = await fetch('/api/settings/business', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -375,7 +375,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
     setBusinessLoading(true);
     setBusinessSaveResult('');
     try {
-      const response = await fetch('http://localhost:3000/api/settings/business', {
+      const response = await fetch('/api/settings/business', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -1240,7 +1240,7 @@ function AdminPanel({ user, token, onBack }: AdminPanelProps) {
                       <input
                         type="text"
                         className="input"
-                        defaultValue="http://localhost:3000/api/payment/callback"
+                        defaultValue="/api/payment/callback"
                         placeholder="Your callback URL"
                       />
                       <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
