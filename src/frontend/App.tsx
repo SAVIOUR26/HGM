@@ -4,8 +4,9 @@ import Dashboard from './pages/Dashboard';
 import POSInterface from './pages/POSInterface';
 import AdminPanel from './pages/AdminPanel';
 import Reports from './pages/Reports';
+import Profile from './pages/Profile';
 
-type Page = 'login' | 'dashboard' | 'pos' | 'admin' | 'reports';
+type Page = 'login' | 'dashboard' | 'pos' | 'admin' | 'reports' | 'profile';
 
 interface User {
   id: number;
@@ -75,6 +76,7 @@ function App() {
           onSectionSelect={handleSectionSelect}
           onNavigateToAdmin={() => navigateTo('admin')}
           onNavigateToReports={() => navigateTo('reports')}
+          onNavigateToProfile={() => navigateTo('profile')}
           onLogout={handleLogout}
         />
       )}
@@ -98,6 +100,14 @@ function App() {
 
       {currentPage === 'reports' && user && token && (
         <Reports
+          user={user}
+          token={token}
+          onBack={handleBackToDashboard}
+        />
+      )}
+
+      {currentPage === 'profile' && user && token && (
+        <Profile
           user={user}
           token={token}
           onBack={handleBackToDashboard}

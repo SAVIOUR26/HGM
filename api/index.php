@@ -45,6 +45,10 @@ switch ($endpoint) {
         require_once __DIR__ . '/auth/login.php';
         break;
 
+    case 'change-password':
+        require_once __DIR__ . '/auth/change-password.php';
+        break;
+
     case 'health':
         echo json_encode([
             'status' => 'ok',
