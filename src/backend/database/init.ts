@@ -151,6 +151,20 @@ function initializeDatabase() {
       )
     `);
 
+    // Business settings table
+    db.run(`
+      CREATE TABLE IF NOT EXISTS business_settings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        business_name TEXT DEFAULT 'HGM Properties Ltd',
+        phone TEXT DEFAULT '+256-XXX-XXXXXX',
+        email TEXT DEFAULT 'info@hgmproperties.com',
+        address TEXT DEFAULT 'Kampala, Uganda',
+        footer_message TEXT DEFAULT 'Thank you for your business!\nPlease visit us again',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     console.log('Database tables created successfully');
 
     // Run migrations
@@ -303,6 +317,25 @@ async function seedInitialData() {
       });
       stmt.finalize();
       console.log('Initial items seeded successfully');
+    }
+  });
+
+  // Seed default business settings
+  db.get('SELECT COUNT(*) as count FROM business_settings', [], (err, row: any) => {
+    if (!err && row.count === 0) {
+      db.run(
+        `INSERT INTO business_settings (business_name, phone, email, address, footer_message)
+         VALUES (?, ?, ?, ?, ?)`,
+        ['HGM Properties Ltd', '+256-XXX-XXXXXX', 'info@hgmproperties.com', 'Kampala, Uganda',
+         'Thank you for your business!\nPlease visit us again'],
+        (err) => {
+          if (err) {
+            console.error('Error creating default business settings:', err);
+          } else {
+            console.log('Default business settings created');
+          }
+        }
+      );
     }
   });
 }

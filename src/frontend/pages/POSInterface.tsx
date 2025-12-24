@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { printThermalReceipt } from '../utils/thermalPrinter';
 
 interface POSInterfaceProps {
   section: 'bar' | 'restaurant' | 'lodge';
@@ -59,7 +60,7 @@ function POSInterface({ section, user, token, onBack }: POSInterfaceProps) {
 
   const fetchItems = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/items?section=${section}&active=true`, {
+      const response = await fetch(`/api/items?section=${section}&active=true`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -109,20 +110,8 @@ function POSInterface({ section, user, token, onBack }: POSInterfaceProps) {
     try {
       console.log(`Auto-printing receipt for transaction ${transactionId}...`);
 
-      const response = await fetch('http://localhost:3000/api/receipt/print', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          transactionId
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Print request failed');
-      }
+      // Use browser-based thermal receipt printer
+      await printThermalReceipt(transactionId);
 
       console.log(`✓ Receipt printed successfully for #${transactionNumber}`);
     } catch (error) {
@@ -135,7 +124,7 @@ function POSInterface({ section, user, token, onBack }: POSInterfaceProps) {
   // Open cash drawer manually
   const openCashDrawer = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/receipt/cash-drawer', {
+      const response = await fetch('/api/receipt/cash-drawer', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -175,7 +164,7 @@ function POSInterface({ section, user, token, onBack }: POSInterfaceProps) {
       };
 
       // Step 1: Create transaction
-      const response = await fetch('http://localhost:3000/api/transactions', {
+      const response = await fetch('/api/transactions', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -212,7 +201,7 @@ function POSInterface({ section, user, token, onBack }: POSInterfaceProps) {
       });
 
       // Step 2: Initiate Pesapal payment
-      const paymentResponse = await fetch('http://localhost:3000/api/payment/initiate', {
+      const paymentResponse = await fetch('/api/payment/initiate', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -264,7 +253,7 @@ function POSInterface({ section, user, token, onBack }: POSInterfaceProps) {
       attempts++;
 
       try {
-        const response = await fetch(`http://localhost:3000/api/payment/status/${orderTrackingId}`, {
+        const response = await fetch(`/api/payment/status/${orderTrackingId}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -343,7 +332,7 @@ function POSInterface({ section, user, token, onBack }: POSInterfaceProps) {
 
     if (paymentModal?.transactionId) {
       try {
-        await fetch(`http://localhost:3000/api/payment/cancel/${paymentModal.transactionId}`, {
+        await fetch(`/api/payment/cancel/${paymentModal.transactionId}`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`

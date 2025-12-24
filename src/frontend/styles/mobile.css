@@ -1,0 +1,195 @@
+/**
+ * Mobile-Responsive Styles
+ * HGM POS System - Optimized for Tablets and Mobile
+ */
+
+/* Base responsive utilities */
+@media (max-width: 1024px) {
+  /* Tablet adjustments */
+  .admin-panel-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .card {
+    padding: 16px !important;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Mobile adjustments */
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 24px !important;
+  }
+
+  h2 {
+    font-size: 20px !important;
+  }
+
+  h3 {
+    font-size: 18px !important;
+  }
+
+  .btn {
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+  }
+
+  .input {
+    padding: 12px !important;
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+
+  /* POS Interface mobile optimizations */
+  .pos-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .pos-item-card {
+    padding: 12px !important;
+  }
+
+  .cart-section {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    border-top: 2px solid #e5e7eb;
+    padding: 16px;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Admin panel mobile */
+  .admin-panel-container {
+    padding: 12px !important;
+  }
+
+  .admin-panel-tabs {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .admin-panel-tab {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Forms mobile */
+  .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tables mobile */
+  table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 8px 4px !important;
+  }
+
+  /* Modals mobile */
+  .modal {
+    width: 95% !important;
+    max-width: 95% !important;
+    margin: 10px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Small phone adjustments */
+  .section-btn {
+    padding: 16px !important;
+    font-size: 16px !important;
+  }
+
+  .pos-item-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+
+  .cart-item-controls {
+    margin-top: 8px;
+    width: 100%;
+  }
+}
+
+/* Touch-friendly elements */
+@media (hover: none) and (pointer: coarse) {
+  .btn {
+    min-height: 44px; /* iOS recommended touch target */
+  }
+
+  .input {
+    min-height: 44px;
+  }
+
+  .clickable {
+    min-height: 44px;
+  }
+}
+
+/* Landscape phone/tablet */
+@media (max-height: 600px) and (orientation: landscape) {
+  .header {
+    padding: 12px !important;
+  }
+
+  .section-selection {
+    padding: 20px !important;
+  }
+
+  .section-btn {
+    padding: 16px !important;
+  }
+}
+
+/* Print media - hide unnecessary elements */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* PWA standalone mode */
+@media all and (display-mode: standalone) {
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .header {
+    padding-top: calc(16px + env(safe-area-inset-top));
+  }
+}
+
+/* Accessibility - Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  /* Optional: Add dark mode styles if needed */
+  /* For now, keeping light theme only for POS clarity */
+}

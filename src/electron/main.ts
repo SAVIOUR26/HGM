@@ -247,21 +247,21 @@ BUSINESS_EMAIL=info@hgmproperties.com
         return;
       }
 
-      // Use node.exe bundled with electron-builder
-      const nodePath = process.platform === 'win32'
-        ? path.join(path.dirname(process.execPath), 'resources', 'node.exe')
-        : process.execPath;
-
-      command = fs.existsSync(nodePath) ? nodePath : 'node';
+      // Use Electron's built-in Node.js runtime
+      // Electron executable itself can run Node.js code
+      command = process.execPath;
       args = [finalBackendPath];
       options = {
         cwd: userDataPath,
-        env,
+        env: {
+          ...env,
+          ELECTRON_RUN_AS_NODE: '1' // This makes Electron behave as Node.js
+        },
         shell: false
       };
 
-      log('info', `Node path: ${nodePath} - Exists: ${fs.existsSync(nodePath)}`);
-      log('info', `Using command: ${command}`);
+      log('info', `Using Electron as Node.js: ${command}`);
+      log('info', `Backend script: ${finalBackendPath}`);
     }
 
     log('info', `Spawning backend: ${command} ${args.join(' ')}`);

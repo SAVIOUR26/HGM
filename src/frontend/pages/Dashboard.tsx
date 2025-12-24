@@ -10,10 +10,11 @@ interface DashboardProps {
   onSectionSelect: (section: 'bar' | 'restaurant' | 'lodge') => void;
   onNavigateToAdmin: () => void;
   onNavigateToReports: () => void;
+  onNavigateToProfile: () => void;
   onLogout: () => void;
 }
 
-function Dashboard({ user, onSectionSelect, onNavigateToAdmin, onNavigateToReports, onLogout }: DashboardProps) {
+function Dashboard({ user, onSectionSelect, onNavigateToAdmin, onNavigateToReports, onNavigateToProfile, onLogout }: DashboardProps) {
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', padding: '20px' }}>
       {/* Header */}
@@ -55,7 +56,7 @@ function Dashboard({ user, onSectionSelect, onNavigateToAdmin, onNavigateToRepor
             </>
           )}
           {user.role === 'cashier' && (
-            <button 
+            <button
               className="btn btn-secondary"
               onClick={onNavigateToReports}
               style={{ fontSize: '14px', padding: '10px 20px' }}
@@ -63,7 +64,14 @@ function Dashboard({ user, onSectionSelect, onNavigateToAdmin, onNavigateToRepor
               📊 My Reports
             </button>
           )}
-          <button 
+          <button
+            className="btn btn-secondary"
+            onClick={onNavigateToProfile}
+            style={{ fontSize: '14px', padding: '10px 20px' }}
+          >
+            👤 My Profile
+          </button>
+          <button
             className="btn btn-danger"
             onClick={onLogout}
             style={{ fontSize: '14px', padding: '10px 20px' }}

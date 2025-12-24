@@ -13,6 +13,7 @@ import userRoutes from './routes/users';
 import cashRoutes from './routes/cash';
 import receiptRoutes from './routes/receipt';
 import paymentRoutes from './routes/payment';
+import settingsRoutes from './routes/settings';
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/cash', cashRoutes);
 app.use('/api/receipt', receiptRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use('/api/settings', settingsRoutes);
 
 // Health check
 app.get('/api/health', (_req, res) => {

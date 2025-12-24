@@ -242,49 +242,61 @@ export class ReceiptService {
   // Get receipt data from database
   static async getReceiptData(transactionId: number): Promise<ReceiptData | null> {
     return new Promise((resolve, reject) => {
-      db.get(
-        `SELECT t.*, u.username, u.full_name 
-         FROM transactions t
-         LEFT JOIN users u ON t.cashier_id = u.id
-         WHERE t.id = ?`,
-        [transactionId],
-        (err, transaction: any) => {
-          if (err || !transaction) {
-            return resolve(null);
-          }
+      // First get business settings
+      db.get('SELECT * FROM business_settings WHERE id = 1', [], (err, businessSettings: any) => {
+        // Use defaults if no settings found
+        const business = businessSettings ? {
+          name: businessSettings.business_name,
+          address: businessSettings.address,
+          phone: businessSettings.phone,
+          email: businessSettings.email
+        } : {
+          name: process.env.BUSINESS_NAME || 'HGM Properties Ltd',
+          address: process.env.BUSINESS_ADDRESS || 'Kampala, Uganda',
+          phone: process.env.BUSINESS_PHONE || '+256-XXX-XXXXXX',
+          email: process.env.BUSINESS_EMAIL || 'info@hgmproperties.com'
+        };
 
-          db.all(
-            'SELECT * FROM transaction_items WHERE transaction_id = ?',
-            [transactionId],
-            (err, items: any) => {
-              if (err) {
-                return reject(err);
-              }
-
-              const receiptData: ReceiptData = {
-                business: {
-                  name: process.env.BUSINESS_NAME || 'HGM Properties Ltd',
-                  address: process.env.BUSINESS_ADDRESS || 'Kampala, Uganda',
-                  phone: process.env.BUSINESS_PHONE || '+256-XXX-XXXXXX',
-                  email: process.env.BUSINESS_EMAIL || 'info@hgmproperties.com'
-                },
-                transaction: {
-                  number: transaction.transaction_number,
-                  date: transaction.created_at,
-                  section: transaction.section,
-                  payment_method: transaction.payment_method,
-                  cashier: transaction.full_name || transaction.username,
-                  customer_name: transaction.customer_name
-                },
-                items: items,
-                total: transaction.total_amount
-              };
-
-              resolve(receiptData);
+        // Get transaction data
+        db.get(
+          `SELECT t.*, u.username, u.full_name
+           FROM transactions t
+           LEFT JOIN users u ON t.cashier_id = u.id
+           WHERE t.id = ?`,
+          [transactionId],
+          (err, transaction: any) => {
+            if (err || !transaction) {
+              return resolve(null);
             }
-          );
-        }
-      );
+
+            db.all(
+              'SELECT * FROM transaction_items WHERE transaction_id = ?',
+              [transactionId],
+              (err, items: any) => {
+                if (err) {
+                  return reject(err);
+                }
+
+                const receiptData: ReceiptData = {
+                  business,
+                  transaction: {
+                    number: transaction.transaction_number,
+                    date: transaction.created_at,
+                    section: transaction.section,
+                    payment_method: transaction.payment_method,
+                    cashier: transaction.full_name || transaction.username,
+                    customer_name: transaction.customer_name
+                  },
+                  items: items,
+                  total: transaction.total_amount
+                };
+
+                resolve(receiptData);
+              }
+            );
+          }
+        );
+      });
     });
   }
 }
