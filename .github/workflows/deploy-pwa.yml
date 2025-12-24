@@ -74,21 +74,17 @@ jobs:
           echo "Files to be deployed:"
           ls -la deploy/
 
-      - name: Deploy to DirectAdmin via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Deploy to DirectAdmin via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
           server: ${{ secrets.FTP_HOST }}
+          port: 22
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./deploy/
-          server-dir: ./domains/wh175143.ispot.cc/public_html/
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/.env
-            **/database.sql
+          local_path: './deploy/*'
+          remote_path: '/home/elibrary/domains/hideout.wh175143.ispot.cc/public_html'
+          sftp_only: true
+          delete_remote_files: false
 
       - name: Deployment Summary
         run: |
