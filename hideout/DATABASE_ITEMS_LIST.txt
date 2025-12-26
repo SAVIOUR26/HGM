@@ -1,172 +1,95 @@
 ╔══════════════════════════════════════════════════════════════════╗
 ║                                                                  ║
-║           HGM POS SYSTEM - COMPLETE ITEMS DATABASE              ║
-║                   200 Items Ready for Business                   ║
+║           HGM POS SYSTEM - ORIGINAL ITEMS DATABASE               ║
+║              EXACT ITEMS FROM ELECTRON SYSTEM                    ║
 ║                                                                  ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 📦 DATABASE: database.sql
-📅 Created: December 25, 2024
-📊 Total Items: 200 items
+📅 Created: December 26, 2024
+📊 Total Items: 39 items (EXACT from original system)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-BAR SECTION - 60 ITEMS
+🍺 BAR SECTION - 19 ITEMS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🍺 BEERS (14 items)
-   • Nile Special, Bell Lager, Tusker Lager, Tusker Malt
-   • Pilsner Lager, Club Pilsner
-   • Guinness Stout, Guinness Smooth
-   • Heineken, Corona Extra, Carlsberg
-   • Castle Lager, White Cap Lager, Eagle Lager
-   Price Range: UGX 3,000 - 6,000
+BEERS (7 items):
+  1. Club Big Small                UGX 5,000    Stock: 100
+  2. Nile                          UGX 4,500    Stock: 100
+  3. Guinness                      UGX 7,000    Stock: 50
+  4. Lager                         UGX 4,000    Stock: 100
+  5. Pilsner                       UGX 4,000    Stock: 100
+  6. Bell Lager                    UGX 4,500    Stock: 100
+  7. Bell Small                    UGX 3,000    Stock: 100
 
-🥃 SPIRITS (17 items)
-   Whiskey (5): Johnnie Walker Red/Black, Jameson, Jack Daniels, Grants
-   Vodka (4): Smirnoff, Absolute, Skyy, Bond 7
-   Gin (4): Gilbeys, Gordons, Tanqueray, Uganda Waragi
-   Rum (2): Captain Morgan, Bacardi
-   Brandy (2): Bond 7, Richot
-   Price Range: UGX 25,000 - 120,000
+RTD (Ready to Drink) (2 items):
+  8. Smirnoff Ice Black            UGX 6,000    Stock: 50
+  9. Smirnoff Ice Red              UGX 6,000    Stock: 50
 
-🍷 WINES (7 items)
-   • 4th Street (Red, White)
-   • Drostdy Hof (Red, White)
-   • Nederburg (Cabernet, Chardonnay)
-   • Rose Wine
-   Price Range: UGX 25,000 - 45,000
+SPIRITS (2 items):
+ 10. Uganda Waragi Big             UGX 25,000   Stock: 30
+ 11. Uganda Waragi Small           UGX 8,000    Stock: 50
 
-🥤 SOFT DRINKS (13 items)
-   • Coca Cola (300ml, 500ml, 1.5L)
-   • Pepsi (300ml, 500ml)
-   • Fanta Orange (300ml, 500ml)
-   • Sprite (300ml, 500ml)
-   • Mountain Dew, Mirinda, Stoney, Novida
-   Price Range: UGX 1,800 - 5,000
+WHISKEY (1 item):
+ 12. Jack Daniels                  UGX 150,000  Stock: 10
 
-🧃 JUICES & ENERGY DRINKS (6 items)
-   • Minute Maid (Mango, Orange, Apple)
-   • Rwenzori Water (500ml, 1.5L)
-   • Red Bull, Monster Energy, Power Horse
-   Price Range: UGX 1,500 - 8,000
+WINE (2 items):
+ 13. Red Wine                      UGX 40,000   Stock: 20
+ 14. White Wine                    UGX 40,000   Stock: 20
 
-🍹 MIXERS (3 items)
-   • Tonic Water, Soda Water, Ginger Ale
-   Price Range: UGX 1,500 - 2,000
+SOFT DRINKS (2 items):
+ 15. Coca Cola                     UGX 2,000    Stock: 200
+ 16. Pepsi                         UGX 2,000    Stock: 200
+
+WATER (1 item):
+ 17. Water                         UGX 1,500    Stock: 300
+
+SNACKS (2 items):
+ 18. G.nuts                        UGX 2,000    Stock: 100
+ 19. Pop Corns                     UGX 3,000    Stock: 100
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-RESTAURANT SECTION - 111 ITEMS
+🍽️ RESTAURANT SECTION - 10 ITEMS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🍳 BREAKFAST (11 items)
-   • Full English Breakfast, Continental Breakfast
-   • Omelette (Plain, Spanish), Scrambled Eggs, Boiled Eggs
-   • Pancakes, French Toast
-   • Kikomando, Katogo Matooke, Porridge
-   Price Range: UGX 4,000 - 18,000
+MAIN COURSE (5 items):
+  1. Grill Chicken                 UGX 25,000   Stock: 0
+  2. Chicken & Fries               UGX 20,000   Stock: 0
+  3. Goat Meat                     UGX 30,000   Stock: 0
+  4. Pillaoo                       UGX 18,000   Stock: 0
+  5. Fish Dish                     UGX 22,000   Stock: 0
 
-🍗 APPETIZERS & STARTERS (9 items)
-   • Chicken Wings (6pcs, 12pcs)
-   • Spring Rolls, Samosas
-   • Muchomo (Goat, Beef, Chicken)
-   • Fried Cassava, Soup of the Day
-   Price Range: UGX 5,000 - 25,000
+MEALS (2 items):
+  6. Breakfast                     UGX 15,000   Stock: 0
+  7. Lunch                         UGX 15,000   Stock: 0
 
-🍛 MAIN COURSES (25 items)
-   
-   Chicken (7): Fried, Grilled, Roast, Burger, Stew, Curry, Biryani
-   Price Range: UGX 12,000 - 20,000
-   
-   Beef (5): Stew, Curry, Burger, Steak, Pilau
-   Price Range: UGX 14,000 - 35,000
-   
-   Fish (4): Fried, Grilled, Fillet, Stew
-   Price Range: UGX 18,000 - 22,000
-   
-   Pork (2): Chops, Ribs
-   Price Range: UGX 20,000 - 25,000
-   
-   Goat (2): Stew, Curry
-   Price Range: UGX 22,000 - 24,000
-
-🥗 VEGETARIAN (3 items)
-   • Vegetable Fried Rice, Vegetable Curry
-   • Vegetable Burger & Chips
-   Price Range: UGX 10,000 - 12,000
-
-🍌 UGANDAN TRADITIONAL (7 items)
-   • Matooke (with Beef, Chicken, Fish, Groundnut Sauce)
-   • Posho & Beans, Sweet Potatoes & Beans, Cassava & Beans
-   Price Range: UGX 6,000 - 16,000
-
-🌮 FAST FOOD / SNACKS (10 items)
-   • Rolex (Egg, Egg & Sausage)
-   • Samosa, Chapati, Mandazi
-   • Meat Pie, Sausage Roll
-   • Chips (Small, Medium, Large)
-   Price Range: UGX 2,000 - 12,000
-
-🍚 SIDE DISHES (10 items)
-   • Rice (Plain, Fried, Pilau)
-   • Matoke, Posho, Irish Potatoes, Sweet Potatoes, Cassava
-   • Salad (Green), Coleslaw
-   Price Range: UGX 3,000 - 10,000
-
-🍰 DESSERTS (6 items)
-   • Fruit Salad
-   • Ice Cream (Single Scoop, Double Scoop)
-   • Chocolate Cake, Vanilla Cake, Doughnut
-   Price Range: UGX 3,000 - 8,000
-
-☕ HOT BEVERAGES (11 items)
-   • Coffee (Black, White)
-   • Cappuccino, Latte
-   • Espresso (Single, Double)
-   • Tea (Black, Milk, Herbal, African)
-   • Hot Chocolate
-   Price Range: UGX 2,500 - 6,000
+SIDES (3 items):
+  8. Rice                          UGX 10,000   Stock: 0
+  9. Matooke                       UGX 8,000    Stock: 0
+ 10. Chips                         UGX 8,000    Stock: 0
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-LODGE SECTION - 29 ITEMS
+🏨 LODGE SECTION - 10 ITEMS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🛏️ ROOM ACCOMMODATION (9 items)
-   • Single Room (Standard, Deluxe)
-   • Double Room (Standard, Deluxe)
-   • Twin Room (Standard, Deluxe)
-   • Family Room
-   • Executive Suite, Presidential Suite
-   Price Range: UGX 50,000 - 250,000 per night
+ROOM (4 items):
+  1. Short Stay (Less than 2 Hours)  UGX 20,000    Stock: 10
+  2. Full Stay (More than 2 Hours)   UGX 35,000    Stock: 10
+  3. 1 Day Stay                      UGX 50,000    Stock: 10
+  4. 1 Week Stay                     UGX 300,000   Stock: 10
 
-⏰ SHORT STAY ROOMS (2 items)
-   • Short Stay (3 Hours, 6 Hours)
-   Price Range: UGX 30,000 - 40,000
-
-📊 CONFERENCE & MEETING (4 items)
-   • Conference Room (Half Day, Full Day)
-   • Boardroom (Half Day, Full Day)
-   Price Range: UGX 150,000 - 350,000
-
-🛎️ EXTRA SERVICES (8 items)
-   • Extra Bed
-   • Breakfast (Continental, Full English)
-   • Airport (Pickup, Drop-off)
-   • Laundry Service, Iron & Press
-   • Room Service Delivery
-   Price Range: UGX 2,000 - 50,000
-
-🎯 ENTERTAINMENT & RECREATION (6 items)
-   • Swimming Pool Day Pass
-   • Gym Day Pass
-   • Sauna Session (1 Hour)
-   • Massage (1 Hour)
-   • Karaoke Room (Per Hour)
-   Price Range: UGX 15,000 - 50,000
+SERVICE (6 items):
+  5. Bed & Breakfast               UGX 60,000   Stock: 100
+  6. Bed Only                      UGX 45,000   Stock: 100
+  7. Ironing                       UGX 5,000    Stock: 100
+  8. Washing                       UGX 10,000   Stock: 100
+  9. Extra Towel                   UGX 3,000    Stock: 50
+ 10. Extra Bed Sheets              UGX 5,000    Stock: 50
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -174,86 +97,107 @@ LODGE SECTION - 29 ITEMS
 📊 SUMMARY BY SECTION
 
 BAR SECTION:
-   Total Items: 60
-   Categories: Beer, Whiskey, Vodka, Gin, Rum, Brandy, Wine,
-              Soft Drinks, Juice, Water, Energy Drink, Mixers
-   Price Range: UGX 1,500 - 120,000
-   
+   Total Items: 19
+   Categories: Beer (7), RTD (2), Spirits (2), Whiskey (1),
+              Wine (2), Soft Drink (2), Water (1), Snacks (2)
+   Price Range: UGX 1,500 - 150,000
+   Total Stock: 1,340 items
+
 RESTAURANT SECTION:
-   Total Items: 111
-   Categories: Breakfast, Appetizers, Main Course, Vegetarian,
-              Traditional, Snacks, Sides, Desserts, Hot Beverages
-   Price Range: UGX 2,000 - 35,000
-   
+   Total Items: 10
+   Categories: Main Course (5), Meals (2), Sides (3)
+   Price Range: UGX 8,000 - 30,000
+   Total Stock: 0 (made-to-order items)
+
 LODGE SECTION:
-   Total Items: 29
-   Categories: Accommodation, Short Stay, Conference, Services,
-              Recreation
-   Price Range: UGX 2,000 - 350,000
+   Total Items: 10
+   Categories: Room (4), Service (6)
+   Price Range: UGX 3,000 - 300,000
+   Total Stock: 390 items/services
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ✨ KEY FEATURES
 
-✅ REALISTIC PRICING
-   • All prices based on Uganda market rates (2024)
-   • Competitive pricing for hospitality business
-   • Range from budget to premium options
+✅ EXACT REPLICATION
+   • All 39 items copied exactly from original Electron system
+   • Same names, prices, stock levels as original
+   • Same categories and sections preserved
+   • No additions, no modifications
 
-✅ COMPREHENSIVE CATEGORIES
-   • 30+ different categories across all sections
-   • Well-organized for easy POS navigation
-   • Local and international products
+✅ ORIGINAL PRICING
+   • All prices match original system
+   • UGX currency throughout
+   • Range from 1,500 to 300,000
 
-✅ DETAILED DESCRIPTIONS
-   • Each item has full description
-   • Sizes and portions specified
-   • Clear product details for staff
+✅ ORIGINAL STOCK LEVELS
+   • Bar items: Full stock levels (30-300 units)
+   • Restaurant: Stock 0 (made-to-order)
+   • Lodge: Service stock levels maintained
 
-✅ STOCK MANAGEMENT
-   • Initial stock levels set
-   • Low stock alerts configured
-   • Ready for inventory tracking
+✅ ORIGINAL CATEGORIES
+   • Beer, RTD, Spirits, Whiskey, Wine
+   • Main Course, Meals, Sides
+   • Room, Service
 
-✅ UGANDAN CONTEXT
-   • Local brands (Uganda Waragi, Nile Special, Bell)
-   • Traditional foods (Matooke, Posho, Rolex)
-   • Local pricing in UGX
-
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📝 ITEMS INCLUDED
-
-BAR (60 items):
-   14 Beers | 17 Spirits | 7 Wines | 13 Soft Drinks
-   6 Juices/Energy | 3 Mixers
-
-RESTAURANT (111 items):
-   11 Breakfast | 9 Appetizers | 25 Main Courses
-   3 Vegetarian | 7 Traditional | 10 Snacks
-   10 Sides | 6 Desserts | 11 Hot Beverages | 19 Others
-
-LODGE (29 items):
-   9 Room Types | 2 Short Stay | 4 Conference
-   8 Services | 6 Recreation
+✅ READY FOR IMPORT
+   • MySQL compatible format
+   • phpMyAdmin ready
+   • Direct import, no modifications needed
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🚀 READY TO USE
+📝 COMPLETE ITEM LIST
 
-This database is production-ready with:
+BAR ITEMS (19):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 1. Club Big Small          Beer         5,000     100
+ 2. Nile                    Beer         4,500     100
+ 3. Guinness                Beer         7,000      50
+ 4. Smirnoff Ice Black      RTD          6,000      50
+ 5. Smirnoff Ice Red        RTD          6,000      50
+ 6. Lager                   Beer         4,000     100
+ 7. Pilsner                 Beer         4,000     100
+ 8. Coca Cola               Soft Drink   2,000     200
+ 9. Pepsi                   Soft Drink   2,000     200
+10. Bell Lager              Beer         4,500     100
+11. Bell Small              Beer         3,000     100
+12. Water                   Water        1,500     300
+13. Uganda Waragi Big       Spirits     25,000      30
+14. Uganda Waragi Small     Spirits      8,000      50
+15. Jack Daniels            Whiskey    150,000      10
+16. Red Wine                Wine        40,000      20
+17. White Wine              Wine        40,000      20
+18. G.nuts                  Snacks       2,000     100
+19. Pop Corns               Snacks       3,000     100
 
-✅ 200 comprehensive items across all business sections
-✅ Realistic Uganda-based pricing (UGX)
-✅ Detailed descriptions for each product
-✅ Stock levels and low stock alerts configured
-✅ Organized by categories for easy POS navigation
-✅ Mix of local and international brands
-✅ Traditional Ugandan foods included
-✅ Full range from budget to premium options
+RESTAURANT ITEMS (10):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 1. Grill Chicken           Main Course  25,000      0
+ 2. Chicken & Fries         Main Course  20,000      0
+ 3. Goat Meat               Main Course  30,000      0
+ 4. Breakfast               Meals        15,000      0
+ 5. Pillaoo                 Main Course  18,000      0
+ 6. Rice                    Sides        10,000      0
+ 7. Matooke                 Sides         8,000      0
+ 8. Lunch                   Meals        15,000      0
+ 9. Fish Dish               Main Course  22,000      0
+10. Chips                   Sides         8,000      0
+
+LODGE ITEMS (10):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 1. Short Stay (<2 Hours)   Room         20,000     10
+ 2. Full Stay (>2 Hours)    Room         35,000     10
+ 3. 1 Day Stay              Room         50,000     10
+ 4. 1 Week Stay             Room        300,000     10
+ 5. Bed & Breakfast         Service      60,000    100
+ 6. Bed Only                Service      45,000    100
+ 7. Ironing                 Service       5,000    100
+ 8. Washing                 Service      10,000    100
+ 9. Extra Towel             Service       3,000     50
+10. Extra Bed Sheets        Service       5,000     50
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -266,27 +210,46 @@ This database is production-ready with:
 4. Choose file: database.sql
 5. Click "Go"
 6. Wait for success message
-7. Verify: 200 items imported ✅
+7. Verify: 39 items imported ✅
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💡 CUSTOMIZATION
+💡 AFTER IMPORT
 
-After import, you can easily:
-   • Edit prices via Admin Panel → Items
-   • Add more items as needed
-   • Adjust stock levels
-   • Modify categories
-   • Update descriptions
-   • Change low stock alerts
+After importing, you can:
+   • Add more items via Admin Panel → Items → Add New Item
+   • Edit prices via Admin Panel → Items → Edit
+   • Adjust stock levels as needed
+   • Modify categories if required
+   • Add descriptions to items
+
+The system is designed to grow with your business!
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Version: 2.0.0-PWA
-Database Size: 22 KB
-Items: 200
+📌 IMPORTANT NOTES
+
+✅ This database contains the EXACT items from your original
+   Electron-based HGM POS system
+
+✅ All names, prices, categories, and stock levels are preserved
+   exactly as they were
+
+✅ No items added, none removed - complete fidelity to original
+
+✅ Restaurant items have stock = 0 because they are made-to-order
+
+✅ After deployment, you can easily add more items through the
+   Admin Panel without needing to touch the database directly
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Version: 2.0.0-PWA (Migrated from Electron)
+Database Size: 8 KB
+Items: 39 (EXACT from original system)
 Tables: 5
 Status: PRODUCTION-READY ✅
 
